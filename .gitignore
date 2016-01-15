@@ -1,0 +1,12 @@
+.svn
+.idea
+.project
+.settings
+out
+bin
+obj
+target
+*.patch
+*.bak
+*.class
+*.iml
