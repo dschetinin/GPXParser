@@ -35,13 +35,7 @@ public class SrtToGpxConverter {
             }
             p.writeGPX(gpx, out);
             logger.info("File '" + OUT_FILENAME + "' has been saved.");
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | TransformerException | IOException e) {
             e.printStackTrace();
         } finally {
         }
