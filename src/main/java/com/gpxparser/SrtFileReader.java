@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * User: dDima <a href="mailto:schetinin.d@gmail.com"/>schetinin.d@gmail.com</a>
+ * User: Dima <a href="mailto:schetinin.d@gmail.com"/>schetinin.d@gmail.com</a>
  * Date: 9/10/2016
  * Time: 8:55 PM
  * To change this template use File | Settings | File Templates.
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
 public class SrtFileReader {
     private static final Logger logger = LogManager.getLogger(SrtFileReader.class);
 
-    private static String IN_FILENAME = "D:\\GIT_Projects\\GPXParser\\files\\DJI_0172.SRT";
+    private static String IN_FILENAME = "C:\\GIT_Projects\\GPXParser\\files\\DJI_0172.SRT";
 
     /*
 
@@ -44,13 +45,18 @@ public class SrtFileReader {
     */
 
     private static Pattern numberLinePattern = Pattern.compile("^[\\d]+$");
-    private static Pattern gpsLinePattern = Pattern.compile("^GPS\\((\\d{2}\\.\\d{4}),(\\d{2}\\.\\d{4}).*BAROMETER:(\\d{2}\\.\\d)$");
+    private static Pattern gpsLinePattern = Pattern.compile("^GPS\\((\\d{2}\\.\\d{4}),(\\d{2}\\.\\d{4}),(\\d{2}).*BAROMETER:(\\d{2}\\.\\d)$");
     private static Pattern dateLinePattern = Pattern.compile("^.*(\\d{4})\\.(\\d{2})\\.(\\d{2})\\s(\\d{2}):(\\d{2}):(\\d{2}).*$");
 
-    private static LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
 
     public static void main (String [] args) {
-        try (FileInputStream fis = new FileInputStream(IN_FILENAME);
+        getPointListFromSrtFile(IN_FILENAME);
+    }
+
+    private static List<SrtDataBlock> getPointListFromSrtFile (String filePath) {
+        LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
+
+        try (FileInputStream fis = new FileInputStream(filePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
 
             String line = reader.readLine();
@@ -74,11 +80,13 @@ public class SrtFileReader {
                 if (matcher.matches()) {
                     Double longitude = Double.parseDouble(matcher.group(1));
                     Double latitude = Double.parseDouble(matcher.group(2));
-                    Double elevation = Double.parseDouble(matcher.group(3));
+                    Double gpsAltitude = 10 * Double.parseDouble(matcher.group(3));
+                    Double elevation = Double.parseDouble(matcher.group(4));
 
                     srtBlock = srtPointList.getLast();
                     srtBlock.setLatitude(latitude);
                     srtBlock.setLongitude(longitude);
+                    srtBlock.setGpsAltitude(gpsAltitude);
                     srtBlock.setElevation(elevation);
                 }
                 // extract and build date object from srt line
@@ -104,6 +112,7 @@ public class SrtFileReader {
         } catch (IOException e) {
             logger.error("Exception occured during execution : ", e);
         }
+        return srtPointList;
     }
 
 }

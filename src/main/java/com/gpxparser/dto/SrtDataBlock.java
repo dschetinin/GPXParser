@@ -16,7 +16,9 @@ public class SrtDataBlock {
 
     private Double latitude;
 
-    private Double elevation;
+    private Double gpsAltitude; // altitude over the sea level (Kiev, Teremki 190-200m, Left Bank of the River up to 100m)
+
+    private Double elevation; // barometric elevation value in meters
 
     private Date time;
 
@@ -42,6 +44,14 @@ public class SrtDataBlock {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+    }
+
+    public Double getGpsAltitude() {
+        return gpsAltitude;
+    }
+
+    public void setGpsAltitude(Double gpsAltitude) {
+        this.gpsAltitude = gpsAltitude;
     }
 
     public Double getElevation() {
@@ -70,6 +80,7 @@ public class SrtDataBlock {
         if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) return false;
         if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
         if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
+        if (gpsAltitude != null ? !gpsAltitude.equals(that.gpsAltitude) : that.gpsAltitude != null) return false;
         if (elevation != null ? !elevation.equals(that.elevation) : that.elevation != null) return false;
         return time != null ? time.equals(that.time) : that.time == null;
 
@@ -80,8 +91,21 @@ public class SrtDataBlock {
         int result = blockNumber != null ? blockNumber.hashCode() : 0;
         result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
         result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
+        result = 31 * result + (gpsAltitude != null ? gpsAltitude.hashCode() : 0);
         result = 31 * result + (elevation != null ? elevation.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "SrtDataBlock{" +
+                "blockNumber=" + blockNumber +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", gpsAltitude=" + gpsAltitude +
+                ", elevation=" + elevation +
+                ", time=" + time +
+                '}';
     }
 }
