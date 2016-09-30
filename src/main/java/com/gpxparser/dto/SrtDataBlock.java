@@ -1,5 +1,6 @@
 package com.gpxparser.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -12,13 +13,13 @@ public class SrtDataBlock {
 
     private Integer blockNumber;
 
-    private Double longitude;
+    private BigDecimal longitude;
 
-    private Double latitude;
+    private BigDecimal latitude;
 
-    private Double gpsAltitude; // altitude over the sea level (Kiev, Teremki 190-200m, Left Bank of the River up to 100m)
+    private BigDecimal gpsAltitude; // altitude over the sea level (Kiev, Teremki 190-200m, Left Bank of the River up to 100m)
 
-    private Double elevation; // barometric elevation value in meters
+    private BigDecimal elevation; // barometric elevation value in meters
 
     private Date time;
 
@@ -30,35 +31,35 @@ public class SrtDataBlock {
         this.blockNumber = blockNumber;
     }
 
-    public Double getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
-    public Double getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public Double getGpsAltitude() {
+    public BigDecimal getGpsAltitude() {
         return gpsAltitude;
     }
 
-    public void setGpsAltitude(Double gpsAltitude) {
+    public void setGpsAltitude(BigDecimal gpsAltitude) {
         this.gpsAltitude = gpsAltitude;
     }
 
-    public Double getElevation() {
+    public BigDecimal getElevation() {
         return elevation;
     }
 
-    public void setElevation(Double elevation) {
+    public void setElevation(BigDecimal elevation) {
         this.elevation = elevation;
     }
 

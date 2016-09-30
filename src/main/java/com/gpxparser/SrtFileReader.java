@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,10 +80,10 @@ public class SrtFileReader {
                 // extract and build GPS elevation data
                 matcher = gpsLinePattern.matcher(line);
                 if (matcher.matches()) {
-                    Double longitude = Double.parseDouble(matcher.group(1));
-                    Double latitude = Double.parseDouble(matcher.group(2));
-                    Double gpsAltitude = 10 * Double.parseDouble(matcher.group(3));
-                    Double elevation = Double.parseDouble(matcher.group(4));
+                    BigDecimal longitude = BigDecimal.valueOf(Double.parseDouble(matcher.group(1)));
+                    BigDecimal latitude = BigDecimal.valueOf(Double.parseDouble(matcher.group(2)));
+                    BigDecimal gpsAltitude = BigDecimal.valueOf(10 * Double.parseDouble(matcher.group(3)));
+                    BigDecimal elevation = BigDecimal.valueOf(Double.parseDouble(matcher.group(4)));
 
                     srtBlock = srtPointList.getLast();
                     srtBlock.setLatitude(latitude);
