@@ -30,19 +30,12 @@ public class SrtFileReaderLambda extends SrtFileReader {
 
     protected Pattern emptyStringPattern = Pattern.compile("^\\n|\\r|\\r\\n|\\u0085|\\u2028|\\u2029$");
 
-    public static void main (String [] args) {
-        SrtFileReaderLambda fileReaderLambda = new SrtFileReaderLambda();
-        SrtFileReader fileReader = new SrtFileReader();
-
-//        fileReader.getPointListFromSrtFile(IN_FILENAME);
-        fileReaderLambda.getPointListFromSrtFile(IN_FILENAME);
-    }
-
     @Override
-    protected List<SrtDataBlock> getPointListFromSrtFile(String filePath) {
+    protected List<SrtDataBlock> getPointListFromSrtFile(String filePath) throws IOException {
         List<String> fileStringList = new ArrayList<>();
         LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
 
+        logger.info("Reading data from input file : " + filePath);
         try (FileInputStream fis = new FileInputStream(filePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
             // first build a list of a string objects
@@ -105,6 +98,7 @@ public class SrtFileReaderLambda extends SrtFileReader {
 
         } catch (IOException e) {
             logger.error("Exception occured during execution : ", e);
+            throw e;
         }
         return srtPointList;
     }

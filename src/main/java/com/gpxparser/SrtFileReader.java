@@ -25,10 +25,7 @@ import java.util.regex.Pattern;
 public class SrtFileReader {
     private static final Logger logger = LogManager.getLogger(SrtFileReader.class);
 
-    protected static String IN_FILENAME = "C:\\GIT_Projects\\GPXParser\\files\\DJI_0172.SRT";
-
     /*
-
     **** Subtitle text fragment format ****
 
     1
@@ -42,7 +39,6 @@ public class SrtFileReader {
     HOME(30.4473,50.3637) 2016.02.25 16:13:00
     GPS(30.4451,50.3657,19) BAROMETER:88.2
     ISO:100 Shutter:500 EV: 0 Fnum:F2.8
-
     */
 
     protected Pattern numberLinePattern = Pattern.compile("^[\\d]+$");
@@ -50,12 +46,7 @@ public class SrtFileReader {
     protected Pattern dateLinePattern = Pattern.compile("^.*(\\d{4})\\.(\\d{2})\\.(\\d{2})\\s(\\d{2}):(\\d{2}):(\\d{2}).*$");
 
 
-    public static void main (String [] args) {
-        SrtFileReader fileReader = new SrtFileReader();
-        fileReader.getPointListFromSrtFile(IN_FILENAME);
-    }
-
-    protected List<SrtDataBlock> getPointListFromSrtFile (String filePath) {
+    protected List<SrtDataBlock> getPointListFromSrtFile (String filePath) throws IOException {
         LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
 
         try (FileInputStream fis = new FileInputStream(filePath);
@@ -118,6 +109,7 @@ public class SrtFileReader {
 
         } catch (IOException e) {
             logger.error("Exception occured during execution : ", e);
+            throw e;
         }
         return srtPointList;
     }

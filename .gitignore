@@ -10,3 +10,4 @@ target
 *.bak
 *.class
 *.iml
+*.log

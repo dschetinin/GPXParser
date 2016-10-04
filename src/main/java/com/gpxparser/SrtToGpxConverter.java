@@ -1,25 +1,20 @@
 package com.gpxparser;
 
 import com.gpxparser.dto.SrtDataBlock;
-import com.gpxparser.resources.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.GregorianCalendar;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Locale;
+import java.util.Properties;
 
+@SpringBootApplication
 public class SrtToGpxConverter {
 
     private static final Logger logger = LogManager.getLogger(SrtToGpxConverter.class);
@@ -34,77 +29,35 @@ public class SrtToGpxConverter {
 
 
     public static void main(String[] args) {
-        try (FileOutputStream out = new FileOutputStream(FILES_FOLDER + File.separator + OUT_FILENAME)) {
+        ApplicationContext ctx = SpringApplication.run(SrtToGpxConverter.class, args);
 
-            logger.info("Reading data from input file : " + IN_FILENAME);
+        // validate log4j java VM option on input
+        String log4jProperty = System.getProperty("log4j.configuration");
+        if (log4jProperty == null || log4jProperty.length() <= 0) {
+            System.out.println("log4j.configuration system property not found, using default one");
+            Properties props = new Properties();
+            try (InputStream in = SrtToGpxConverter.class.getClassLoader().getResourceAsStream("log4j.properties")) {
+                props.load(in);
+            } catch (IOException e) {
+                System.err.println("Can not load configuration file ");
+                e.printStackTrace(System.err);
+            }
+            LogManager.resetConfiguration();
+            PropertyConfigurator.configure(props);
+        }
+        // run the converter itself
+        try {
+
             SrtFileReaderLambda fileReaderLambda = new SrtFileReaderLambda();
             List<SrtDataBlock> srtList = fileReaderLambda.getPointListFromSrtFile(FILES_FOLDER + File.separator + IN_FILENAME);
 
-            // create JAXB object factory to manage JAXB elements creation
-            JAXBContext jc = JAXBContext.newInstance("com.gpxparser.resources");
-            ObjectFactory objFactory = new ObjectFactory();
+            GpxFileWriter fileWriter = new GpxFileWriter();
+            fileWriter.writeSrtPointToGpxFile(srtList, FILES_FOLDER + File.separator + OUT_FILENAME);
 
-            GpxType gpxType = objFactory.createGpxType();
-            gpxType.setCreator("SrtToGpx java conversion tool");
-            gpxType.setVersion("1.1");
-
-            MetadataType metadata = objFactory.createMetadataType();
-            LinkType linkMetaData = objFactory.createLinkType();
-            linkMetaData.setHref("http://use.our.converter");
-            linkMetaData.setText("Srt to GPX converter");
-            metadata.getLink().add(linkMetaData);
-
-            gpxType.setMetadata(metadata);
-
-            TrkType trkType = objFactory.createTrkType();
-            LinkType linkTrk = objFactory.createLinkType();
-            TrksegType trkSeqType = objFactory.createTrksegType();
-
-            for (SrtDataBlock srtBlock : srtList) {
-                WptType wptType = objFactory.createWptType();
-                wptType.setLat(srtBlock.getLatitude());
-                wptType.setLon(srtBlock.getLongitude());
-                wptType.setEle(srtBlock.getElevation());
-                GregorianCalendar c = new GregorianCalendar(Locale.getDefault());
-                c.setTime(srtBlock.getTime());
-                XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-                wptType.setTime(xmlCal);
-
-//                ExtensionsType extensions = objFactory.createExtensionsType();
-//                wptType.setExtensions(extensions);
-                trkSeqType.getTrkpt().add(wptType);
-            }
-
-            linkTrk.setHref("http://use.our.converter/download.link");
-            linkTrk.setText("Get the GPX file from the link");
-
-            trkType.getLink().add(linkTrk);
-            trkType.getTrkseg().add(trkSeqType);
-            gpxType.getTrk().add(trkType);
-
-            // create marshaller and save GPX data to XML document
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty("com.sun.xml.internal.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://www.topografix.com/GPX/1/1 " +
-                    "http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 " +
-                    "http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd " +
-                    "http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd");
-//            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-            QName qName = new QName("http://www.topografix.com/GPX/1/1","gpx");
-
-            marshaller.marshal(new JAXBElement(qName, GpxType.class, gpxType), out);
-
-            logger.info("File '" + OUT_FILENAME + "' has been saved.");
-        } catch (DatatypeConfigurationException | JAXBException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Exception occured in main() : ", e);
         } finally {
 
         }
-    }
-
-    private static void loadGpxData() {
-
     }
 }
