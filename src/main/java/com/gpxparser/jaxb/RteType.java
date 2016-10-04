@@ -1,5 +1,5 @@
 
-package com.gpxparser.resources;
+package com.gpxparser.jaxb;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

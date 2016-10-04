@@ -1,5 +1,5 @@
 
-package com.gpxparser.resources;
+package com.gpxparser.jaxb;
 
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;

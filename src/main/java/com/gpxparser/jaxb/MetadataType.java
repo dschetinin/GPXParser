@@ -1,7 +1,6 @@
 
-package com.gpxparser.resources;
+package com.gpxparser.jaxb;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,31 +8,33 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * 
- * 		trk represents a track - an ordered list of points describing a path.
+ * 		Information about the GPX file, author, and copyright restrictions goes in the metadata section.  Providing rich,
+ * 		meaningful information about your GPX files allows others to search for and use your GPS data.
  * 	  
  * 
- * <p>Java class for trkType complex type.
+ * <p>Java class for metadataType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="trkType">
+ * &lt;complexType name="metadataType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="cmt" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="desc" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="src" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="author" type="{http://www.topografix.com/GPX/1/1}personType" minOccurs="0"/>
+ *         &lt;element name="copyright" type="{http://www.topografix.com/GPX/1/1}copyrightType" minOccurs="0"/>
  *         &lt;element name="link" type="{http://www.topografix.com/GPX/1/1}linkType" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="number" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" minOccurs="0"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="time" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="keywords" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="bounds" type="{http://www.topografix.com/GPX/1/1}boundsType" minOccurs="0"/>
  *         &lt;element name="extensions" type="{http://www.topografix.com/GPX/1/1}extensionsType" minOccurs="0"/>
- *         &lt;element name="trkseg" type="{http://www.topografix.com/GPX/1/1}trksegType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -43,38 +44,38 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "trkType", namespace = "http://www.topografix.com/GPX/1/1", propOrder = {
+@XmlType(name = "metadataType", namespace = "http://www.topografix.com/GPX/1/1", propOrder = {
     "name",
-    "cmt",
     "desc",
-    "src",
+    "author",
+    "copyright",
     "link",
-    "number",
-    "type",
-    "extensions",
-    "trkseg"
+    "time",
+    "keywords",
+    "bounds",
+    "extensions"
 })
-public class TrkType {
+public class MetadataType {
 
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
     protected String name;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
-    protected String cmt;
-    @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
     protected String desc;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
-    protected String src;
+    protected PersonType author;
+    @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
+    protected CopyrightType copyright;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
     protected List<LinkType> link;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
-    @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger number;
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar time;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
-    protected String type;
+    protected String keywords;
+    @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
+    protected BoundsType bounds;
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
     protected ExtensionsType extensions;
-    @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")
-    protected List<TrksegType> trkseg;
 
     /**
      * Gets the value of the name property.
@@ -98,30 +99,6 @@ public class TrkType {
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the cmt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCmt() {
-        return cmt;
-    }
-
-    /**
-     * Sets the value of the cmt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCmt(String value) {
-        this.cmt = value;
     }
 
     /**
@@ -149,27 +126,51 @@ public class TrkType {
     }
 
     /**
-     * Gets the value of the src property.
+     * Gets the value of the author property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link PersonType }
      *     
      */
-    public String getSrc() {
-        return src;
+    public PersonType getAuthor() {
+        return author;
     }
 
     /**
-     * Sets the value of the src property.
+     * Sets the value of the author property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link PersonType }
      *     
      */
-    public void setSrc(String value) {
-        this.src = value;
+    public void setAuthor(PersonType value) {
+        this.author = value;
+    }
+
+    /**
+     * Gets the value of the copyright property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CopyrightType }
+     *     
+     */
+    public CopyrightType getCopyright() {
+        return copyright;
+    }
+
+    /**
+     * Sets the value of the copyright property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CopyrightType }
+     *     
+     */
+    public void setCopyright(CopyrightType value) {
+        this.copyright = value;
     }
 
     /**
@@ -202,51 +203,75 @@ public class TrkType {
     }
 
     /**
-     * Gets the value of the number property.
+     * Gets the value of the time property.
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public BigInteger getNumber() {
-        return number;
+    public XMLGregorianCalendar getTime() {
+        return time;
     }
 
     /**
-     * Sets the value of the number property.
+     * Sets the value of the time property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setNumber(BigInteger value) {
-        this.number = value;
+    public void setTime(XMLGregorianCalendar value) {
+        this.time = value;
     }
 
     /**
-     * Gets the value of the type property.
+     * Gets the value of the keywords property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getType() {
-        return type;
+    public String getKeywords() {
+        return keywords;
     }
 
     /**
-     * Sets the value of the type property.
+     * Sets the value of the keywords property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setType(String value) {
-        this.type = value;
+    public void setKeywords(String value) {
+        this.keywords = value;
+    }
+
+    /**
+     * Gets the value of the bounds property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BoundsType }
+     *     
+     */
+    public BoundsType getBounds() {
+        return bounds;
+    }
+
+    /**
+     * Sets the value of the bounds property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BoundsType }
+     *     
+     */
+    public void setBounds(BoundsType value) {
+        this.bounds = value;
     }
 
     /**
@@ -271,35 +296,6 @@ public class TrkType {
      */
     public void setExtensions(ExtensionsType value) {
         this.extensions = value;
-    }
-
-    /**
-     * Gets the value of the trkseg property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the trkseg property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getTrkseg().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TrksegType }
-     * 
-     * 
-     */
-    public List<TrksegType> getTrkseg() {
-        if (trkseg == null) {
-            trkseg = new ArrayList<TrksegType>();
-        }
-        return this.trkseg;
     }
 
 }

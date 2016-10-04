@@ -1,7 +1,7 @@
 package com.gpxparser;
 
 import com.gpxparser.dto.SrtDataBlock;
-import com.gpxparser.resources.*;
+import com.gpxparser.jaxb.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -32,7 +32,7 @@ public class GpxFileWriter {
         try (FileOutputStream out = new FileOutputStream(filePath)) {
 
             // create JAXB object factory to manage JAXB elements creation
-            JAXBContext jc = JAXBContext.newInstance("com.gpxparser.resources");
+            JAXBContext jc = JAXBContext.newInstance("com.gpxparser.jaxb");
             ObjectFactory objFactory = new ObjectFactory();
 
             GpxType gpxType = objFactory.createGpxType();
