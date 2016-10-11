@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class DefaultController {
 
-    @RequestMapping("/")
+    @RequestMapping("/123")
     public String index() {
         return "DJI Phantom 3 professional converter.<br/>It converts Phantom .SRT files to tomographic .GPX files.<br/>Simply send a POST request to URL /converter and get a result back in .GPX";
     }
 
-    @RequestMapping(value = "/hello" , method = RequestMethod.GET)
+    @RequestMapping(value = "/hellao" , method = RequestMethod.GET)
     public String hello(@RequestParam(name = "name", required = false) String name, Model model) {
         model.addAttribute("name", name);
         return "hello";
