@@ -3,6 +3,7 @@ package com.gpxparser.controller;
 import com.gpxparser.jaxb.GpxType;
 import com.gpxparser.jaxb.ObjectFactory;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
  * Time: 3:20 PM
  * To change this template use File | Settings | File Templates.
  */
-@RestController
-public class DefaultController {
+@Controller
+public class RestWSController {
 
     @RequestMapping("/123")
     public String index() {
@@ -26,13 +27,12 @@ public class DefaultController {
         return "hello";
     }
 
-    @RequestMapping(value = "/xml/{name}", method = RequestMethod.GET, produces = { "application/xml", "text/xml" }, consumes = MediaType.ALL_VALUE )
-    @ResponseBody
-    public GpxType simpleXml(@PathVariable String name) {
+    @RequestMapping(value = "/xml/{pathVar}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
+    public @ResponseBody GpxType simpleXml(@RequestParam(value="name", defaultValue="GPX Parser v1.0") String param, @PathVariable(name = "pathVar", required = false, value = "") String pathVar) {
         ObjectFactory objFactory = new ObjectFactory();
         GpxType gpx = objFactory.createGpxType();
         gpx.setCreator("Spring MVC");
-        gpx.setCreator(name);
+        gpx.setCreator(param);
         return gpx;
     }
 }

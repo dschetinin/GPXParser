@@ -5,8 +5,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,13 +31,11 @@ public class SrtFileReaderLambda extends SrtFileReader {
     protected Pattern emptyStringPattern = Pattern.compile("^\\n|\\r|\\r\\n|\\u0085|\\u2028|\\u2029$");
 
     @Override
-    protected List<SrtDataBlock> getPointListFromSrtFile(String filePath) throws IOException {
+    public List<SrtDataBlock> getPointListFromSrtFile(InputStream is) throws IOException {
         List<String> fileStringList = new ArrayList<>();
         LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
 
-        logger.info("Reading data from input file : " + filePath);
-        try (FileInputStream fis = new FileInputStream(filePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             // first build a list of a string objects
             String text = reader.readLine();
             while (text != null) {
