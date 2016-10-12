@@ -5,8 +5,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -46,11 +46,10 @@ public class SrtFileReader {
     protected Pattern dateLinePattern = Pattern.compile("^.*(\\d{4})\\.(\\d{2})\\.(\\d{2})\\s(\\d{2}):(\\d{2}):(\\d{2}).*$");
 
 
-    protected List<SrtDataBlock> getPointListFromSrtFile (String filePath) throws IOException {
+    public List<SrtDataBlock> getPointListFromSrtFile(InputStream is) throws IOException {
         LinkedList<SrtDataBlock> srtPointList = new LinkedList<SrtDataBlock>();
 
-        try (FileInputStream fis = new FileInputStream(filePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 
             String line = reader.readLine();
             while (line != null) {

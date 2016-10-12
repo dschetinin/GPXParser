@@ -1,13 +1,9 @@
 
 package com.gpxparser.jaxb;
 
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -48,6 +44,11 @@ import javax.xml.bind.annotation.XmlType;
     "trk",
     "extensions"
 })
+/**
+ * XMLRootElement is a very important annotation for Spring Jaxb2Marshaller,
+ * it should be here and configured in this way
+ */
+@XmlRootElement(name = "gpx", namespace = "http://www.topografix.com/GPX/1/1")
 public class GpxType {
 
     @XmlElement(namespace = "http://www.topografix.com/GPX/1/1")

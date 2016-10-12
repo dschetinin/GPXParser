@@ -1,6 +1,5 @@
 package com.gpxparser;
 
-import com.gpxparser.dto.SrtDataBlock;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -8,10 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 @SpringBootApplication
@@ -46,6 +43,7 @@ public class SrtToGpxConverter {
             PropertyConfigurator.configure(props);
         }
         // run the converter itself
+/*
         try {
 
             SrtFileReaderLambda fileReaderLambda = new SrtFileReaderLambda();
@@ -59,5 +57,15 @@ public class SrtToGpxConverter {
         } finally {
 
         }
+
+        Jaxb2Marshaller marshaller = (Jaxb2Marshaller) ctx.getBean("jaxbMarshaller");
+        ObjectFactory objFactory = new ObjectFactory();
+        GpxType gpx = objFactory.createGpxType();
+        gpx.setCreator("Spring MVC");
+        gpx.setVersion("1.1");
+        QName qName = new QName("http://www.topografix.com/GPX/1/1","gpx");
+//        marshaller.marshal(new JAXBElement(qName, GpxType.class, gpx), new StreamResult(System.out) );
+        marshaller.marshal(gpx, new StreamResult(System.out) );
+*/
     }
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>GPX Parser</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="${text}" /><br/>
+Download <b th:text="${gpxFileName}"/> from <a th:href="@{|/xml/${gpxFileName}|}" target="_blank">here</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b><br/>
+<a href="/intro">Upload another one</a><br/>
+</body>
+</html>
