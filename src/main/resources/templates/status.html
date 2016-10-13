@@ -1,0 +1,11 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Srt2Gpx Status Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'Total files processed ' + ${totalFilesProcessed}"/>
+<div th:each="fileName : ${fileNames}" th:text="${fileName}"/>
+</body>
+</html>

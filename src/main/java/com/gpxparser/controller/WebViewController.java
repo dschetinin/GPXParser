@@ -80,6 +80,23 @@ public class WebViewController {
         return "successUpload";
     }
 
+    @RequestMapping("/status")
+    public String status(Model model, HttpServletRequest request) {
+        int totalFilesProcessed = 0;
+
+        HttpSession session = request.getSession();
+        if (session != null && session.getAttribute("gpxDataMap") != null) {
+            Map<String, GpxType> gpxDataMap = (Map<String, GpxType>) session.getAttribute("gpxDataMap");
+            if (gpxDataMap.size() > 0) {
+                totalFilesProcessed = gpxDataMap.size();
+                model.addAttribute("fileNames", gpxDataMap.keySet());
+            }
+        }
+        model.addAttribute("totalFilesProcessed", Integer.toString(totalFilesProcessed));
+        return "status";
+    }
+
+
     private String validateMultipartFile (MultipartFile multipartFile) {
         String errorText = null;
         try {
