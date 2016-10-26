@@ -33,4 +33,10 @@ public class RestWSController {
     public @ResponseBody GpxType simpleXml(@PathVariable(name = "fileName") String fileName, @ModelAttribute("gpxDataMap") Map<String, GpxType> gpxDataMap) {
         return gpxDataMap.get(fileName);
     }
+
+    // TODO: complete xml -> json and backward conversion here
+    @RequestMapping(value = "/json/{fileName:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody GpxType simpleJson(@PathVariable(name = "fileName") String fileName, @ModelAttribute("gpxDataMap") Map<String, GpxType> gpxDataMap) {
+        return gpxDataMap.get(fileName);
+    }
 }
