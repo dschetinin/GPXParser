@@ -1,5 +1,6 @@
 package com.gpxparser.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpxparser.GpxFileWriter;
 import com.gpxparser.SrtFileReaderLambda;
 import com.gpxparser.dto.SrtDataBlock;
@@ -7,9 +8,16 @@ import com.gpxparser.jaxb.GpxType;
 import com.gpxparser.model.FileUploadModel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +34,16 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@SessionAttributes(names = {"gpxDataMap"}, types = {Map.class})
+@SessionAttributes(names = {"gpxDataMap", "gpxDataMapJsonString"}, types = {Map.class, String.class})
 public class WebViewController {
 
     private static final Logger logger = LogManager.getLogger(WebViewController.class);
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonConverter;
+
+    @Autowired
+    private Environment environment;
 
     @RequestMapping("/")
     public String index() {
@@ -44,11 +58,17 @@ public class WebViewController {
         if (session != null && session.getAttribute("gpxDataMap") == null) {
             session.setAttribute("gpxDataMap", new HashMap<String, GpxType>());
         }
+        if (session != null && session.getAttribute("gpxDataMapJsonString") == null) {
+            session.setAttribute("gpxDataMapJsonString", new HashMap<String, String>());
+        }
         return "intro";
     }
 
     @RequestMapping(value = "/uploadSrtFile", method = RequestMethod.POST)
-    public String uploadSrtFile(@ModelAttribute FileUploadModel fileUploadModel, @ModelAttribute("gpxDataMap") Map<String, GpxType> gpxDataMap, Model model) {
+    public String uploadSrtFile(@ModelAttribute FileUploadModel fileUploadModel,
+                                @ModelAttribute("gpxDataMap") Map<String, GpxType> gpxDataMap,
+                                @ModelAttribute("gpxDataMapJsonString") Map<String, String> gpxDataMapJsonString,
+                                Model model) {
         // validate upload
         MultipartFile multipartFile = fileUploadModel.getFile();
         String errorText = validateMultipartFile(multipartFile);
@@ -57,17 +77,30 @@ public class WebViewController {
             model.addAttribute("errorText", errorText);
             return "intro";
         }
+        String originalFileName = multipartFile.getOriginalFilename();
 
         try {
+            String gpxFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + ".GPX";
+            String xmlFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + ".XML";
+            String applicationRootUrl = environment.getProperty("application.web.url");
+
+            // Parse .SRT file and create .GPX
             SrtFileReaderLambda fileReader = new SrtFileReaderLambda();
             GpxFileWriter fileWriter = new GpxFileWriter();
             List<SrtDataBlock> srtList = fileReader.getPointListFromSrtFile(multipartFile.getInputStream());
-            GpxType gpxType = fileWriter.writeSrtPointToGpxFile(srtList);
-            String gpxFileName = multipartFile.getOriginalFilename().substring(0, multipartFile.getOriginalFilename().lastIndexOf(".")) + ".GPX";
+            GpxType gpxType = fileWriter.writeSrtPointToGpxFile(srtList, applicationRootUrl, xmlFileName);
 
+            // Put .GPX file int session
             gpxDataMap.put(gpxFileName, gpxType);
             model.addAttribute("gpxFileName", gpxFileName);
-        } catch (IOException e) {
+
+            // This part was developed as a prelude to DB data upload development
+            // see RestWSController#jsonToXml method
+            ObjectMapper mapper = jacksonConverter.getObjectMapper();
+            // Put json string into a session object
+            gpxDataMapJsonString.put(gpxFileName, mapper.writeValueAsString(gpxType));
+            logger.warn(String.format("Converted JSON string : %s", gpxDataMapJsonString.get(gpxFileName)));
+        } catch (IOException | BeansException e) {
             logger.error("Exception occured in controller ", e);
             errorText = "IOException occured while processing the file.";
         }

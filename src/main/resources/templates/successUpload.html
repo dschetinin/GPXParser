@@ -6,8 +6,11 @@
 </head>
 <body>
 <p th:text="${text}" /><br/>
-Download <b th:text="${gpxFileName}"/> from <a th:href="@{|/xml/${gpxFileName}|}" target="_blank">here</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b><br/>
+Download file <b th:text="${gpxFileName}"/>:<br/>
+XML format <a th:href="@{|/xml/${gpxFileName}|}" target="_blank">here</a><br/>
+JSON format <a th:href="@{|/json/${gpxFileName}|}" target="_blank">here</a><br/>
+conversion test can be checked <a th:href="@{|/jsonToXml/${gpxFileName}|}" target="_blank">here</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<br/>
 <a href="/intro">Upload another one</a><br/>
 </body>
 </html>

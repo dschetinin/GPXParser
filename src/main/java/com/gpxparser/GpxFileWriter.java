@@ -24,7 +24,7 @@ import java.util.Locale;
 public class GpxFileWriter {
     private static final Logger logger = LogManager.getLogger(GpxFileWriter.class);
 
-    public GpxType writeSrtPointToGpxFile(List<SrtDataBlock> srtList) throws IOException {
+    public GpxType writeSrtPointToGpxFile(List<SrtDataBlock> srtList, String applicationRootUrl, String downloadFileName) throws IOException {
         GpxType gpxType = null;
         try {
 
@@ -38,7 +38,7 @@ public class GpxFileWriter {
 
             MetadataType metadata = objFactory.createMetadataType();
             LinkType linkMetaData = objFactory.createLinkType();
-            linkMetaData.setHref("http://use.our.converter");
+            linkMetaData.setHref(applicationRootUrl);
             linkMetaData.setText("Srt to GPX converter");
             metadata.getLink().add(linkMetaData);
 
@@ -63,7 +63,7 @@ public class GpxFileWriter {
                 trkSeqType.getTrkpt().add(wptType);
             }
 
-            linkTrk.setHref("http://use.our.converter/download.link");
+            linkTrk.setHref(applicationRootUrl + "/xml/" + downloadFileName);
             linkTrk.setText("Get the GPX file from the link");
 
             trkType.getLink().add(linkTrk);

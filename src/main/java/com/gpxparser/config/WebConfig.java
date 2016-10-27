@@ -1,11 +1,15 @@
 package com.gpxparser.config;
 
 import com.gpxparser.jaxb.GpxType;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -25,12 +29,24 @@ import java.util.Map;
  */
 @Configuration
 @ComponentScan({ "com.gpxparser.controller" })
+@PropertySource("classpath:gpxparser.properties")
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private static final Logger logger = LogManager.getLogger(WebConfig.class);
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(marshallingMessageConverter());
+        converters.add(jacksonMessageConverter());
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter jacksonMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        // set some settings upon converter
+//        converter.setObjectMapper(new ObjectMapper());
+        return converter;
     }
 
     @Bean
