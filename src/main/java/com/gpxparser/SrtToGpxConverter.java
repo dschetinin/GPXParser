@@ -6,24 +6,17 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 @SpringBootApplication
+@EnableScheduling
 public class SrtToGpxConverter {
 
     private static final Logger logger = LogManager.getLogger(SrtToGpxConverter.class);
-
-    private static String FILES_FOLDER = "C:\\GIT_Projects\\GPXParser\\files";
-
-    private static String IN_FILENAME = "DJI_0179.SRT";
-//    private static String IN_FILENAME = "C:\\GIT_Projects\\GPXParser\\files\\runtastic_20160109_1147_Беговые лыжи.gpx";
-//    private static String IN_FILENAME = "D:\\GIT_Projects\\GPXParser\\files\\runtastic_20160109_1147_Беговые_лыжи.gpx";
-//    private static String OUT_FILENAME = "C:\\GIT_Projects\\GPXParser\\files\\12jan2016_out_3.gpx";
-    private static String OUT_FILENAME = "DJI_0179.gpx";
-
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(SrtToGpxConverter.class, args);
@@ -42,30 +35,5 @@ public class SrtToGpxConverter {
             LogManager.resetConfiguration();
             PropertyConfigurator.configure(props);
         }
-        // run the converter itself
-/*
-        try {
-
-            SrtFileReaderLambda fileReaderLambda = new SrtFileReaderLambda();
-            List<SrtDataBlock> srtList = fileReaderLambda.getPointListFromSrtFile(FILES_FOLDER + File.separator + IN_FILENAME);
-
-            GpxFileWriter fileWriter = new GpxFileWriter();
-            fileWriter.writeSrtPointToGpxFile(srtList, FILES_FOLDER + File.separator + OUT_FILENAME);
-
-        } catch (IOException e) {
-            logger.error("Exception occured in main() : ", e);
-        } finally {
-
-        }
-
-        Jaxb2Marshaller marshaller = (Jaxb2Marshaller) ctx.getBean("jaxbMarshaller");
-        ObjectFactory objFactory = new ObjectFactory();
-        GpxType gpx = objFactory.createGpxType();
-        gpx.setCreator("Spring MVC");
-        gpx.setVersion("1.1");
-        QName qName = new QName("http://www.topografix.com/GPX/1/1","gpx");
-//        marshaller.marshal(new JAXBElement(qName, GpxType.class, gpx), new StreamResult(System.out) );
-        marshaller.marshal(gpx, new StreamResult(System.out) );
-*/
     }
 }

@@ -97,6 +97,7 @@ public class WebViewController {
             // This part was developed as a prelude to DB data upload development
             // see RestWSController#jsonToXml method
             ObjectMapper mapper = jacksonConverter.getObjectMapper();
+            // in case if formatting is necessary mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
             // Put json string into a session object
             gpxDataMapJsonString.put(gpxFileName, mapper.writeValueAsString(gpxType));
             logger.warn(String.format("Converted JSON string : %s", gpxDataMapJsonString.get(gpxFileName)));
