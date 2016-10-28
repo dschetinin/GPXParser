@@ -3,10 +3,10 @@ package com.gpxparser.config;
 import com.gpxparser.jaxb.GpxType;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -29,11 +29,13 @@ import java.util.Map;
  */
 @Configuration
 @ComponentScan({ "com.gpxparser.controller" })
-@PropertySource("classpath:gpxparser.properties")
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger logger = LogManager.getLogger(WebConfig.class);
+
+    @Value("${application.web.maxUploadFileSize}")
+    private int maxUploadFileSize;    // 25
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -79,7 +81,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public CommonsMultipartResolver multipartResolver () {
         CommonsMultipartResolver  multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(100000);
+        multipartResolver.setMaxUploadSize(maxUploadFileSize);
 //        multipartResolver.setDefaultEncoding("UTF-8");
         return multipartResolver;
     }

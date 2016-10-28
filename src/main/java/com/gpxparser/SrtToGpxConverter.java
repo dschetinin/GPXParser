@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @SpringBootApplication
-@EnableScheduling
 public class SrtToGpxConverter {
 
     private static final Logger logger = LogManager.getLogger(SrtToGpxConverter.class);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpxparser.GpxFileWriter;
 import com.gpxparser.dto.SrtDataBlock;
 import com.gpxparser.jaxb.GpxType;
+import com.gpxparser.json.Json;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,10 @@ public class RestWSController {
     @RequestMapping(value = "/json/{fileName:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody GpxType simpleJson(@PathVariable(name = "fileName") String fileName, @ModelAttribute("gpxDataMap") Map<String, GpxType> gpxDataMap) {
         return gpxDataMap.get(fileName);
+    }
+
+    @RequestMapping(value = "/json/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Json simpleJsonExample() {
+        return new Json("{\"type\":\"object\", \"properties\":{\"foo\": {\"type\": \"string\"},\"bar\": {\"type\": \"integer\"},\"baz\": {\"type\": \"boolean\"}}}");
     }
 }
