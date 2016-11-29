@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpxparser.GpxFileWriter;
 import com.gpxparser.dto.SrtDataBlock;
 import com.gpxparser.jaxb.GpxType;
+import com.gpxparser.jpa.GpxTracksHistoryEntity;
 import com.gpxparser.json.Json;
+import com.gpxparser.repository.GpxTracksDao;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class RestWSController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private GpxTracksDao gpxTracksDao;
 
     @RequestMapping("/123")
     public String index() {
@@ -77,5 +82,11 @@ public class RestWSController {
     @RequestMapping(value = "/json/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Json simpleJsonExample() {
         return new Json("{\"type\":\"object\", \"properties\":{\"foo\": {\"type\": \"string\"},\"bar\": {\"type\": \"integer\"},\"baz\": {\"type\": \"boolean\"}}}");
+    }
+
+    @RequestMapping(value = "/json/fromDB/{fileName:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Json loadJsonFromDB(@PathVariable(name = "fileName") String fileName) {
+        GpxTracksHistoryEntity gpxTrack = gpxTracksDao.getByFileName(fileName);
+        return new Json(gpxTrack.getGpxData());
     }
 }
