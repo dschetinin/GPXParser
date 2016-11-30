@@ -1,20 +1,52 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <title>GPX Parser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DJI Phantom 3 subtitles converter</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/intro">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
 
-    <p>DJI Phantom 3 subtitles converter.<br/>It converts Phantom .SRT files to tomographic .GPX files.</p>
-    <br/><br/>
-    <p><b>File Upload Form</b></p>
-    <p style="color: red;" th:text="${errorText}"/>
-    <form action="#" th:action="@{/uploadSrtFile}" th:object="${fileUploadModel}" method="POST" enctype="multipart/form-data">
-        <p>File to upload: <input type="file" th:field="*{file}" /></p>
-        <p>Comment: <input type="text" th:field="*{comment}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
+<div class="container">
 
+    <div class="starter-template">
+        <br/><br/><br/><br/>
+        <p class="lead">It converts Phantom .SRT files to tomographic .GPX files</p>
+        <br/><br/>
+        <p><b>File Upload Form</b></p>
+        <p style="color: red;" th:text="${errorText}"/>
+        <form action="#" th:action="@{/uploadSrtFile}" th:object="${fileUploadModel}" method="POST" enctype="multipart/form-data">
+            <p>File to upload: <input type="file" th:field="*{file}" /></p>
+            <p>Comment: <input type="text" th:field="*{comment}" /></p>
+            <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+        </form>
+    </div>
+
+</div><!-- /.container -->
 </body>
 </html>

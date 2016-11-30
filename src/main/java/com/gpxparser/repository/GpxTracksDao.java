@@ -28,7 +28,7 @@ public class GpxTracksDao {
     }
 
     /**
-     * Delete the gpxTracl from the database.
+     * Delete the gpxTrack from the database.
      */
     public void delete(GpxTracksHistoryEntity gpxTrack) {
         if (entityManager.contains(gpxTrack))
@@ -45,11 +45,20 @@ public class GpxTracksDao {
                 .setParameter("fileName", fileName)
                 .getSingleResult();
     }
+
     /**
      * Return all the users stored in the database.
      */
     @SuppressWarnings("unchecked")
     public List getAll() {
         return entityManager.createQuery("from GpxTracksHistoryEntity").getResultList();
+    }
+
+    /**
+     * Return all the users stored in the database.
+     */
+    @SuppressWarnings("unchecked")
+    public List getAllDesc() {
+        return entityManager.createQuery("from GpxTracksHistoryEntity track order by track.dateCreated desc").getResultList();
     }
 }
