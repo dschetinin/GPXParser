@@ -91,4 +91,21 @@ public class GpxTracksHistoryEntity {
         result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+
+        int maxGpxDataLenght = 203;
+
+        String gpxDataShort =
+                gpxData != null && gpxData.length() > maxGpxDataLenght ? gpxData.substring(0, maxGpxDataLenght) + "..." : gpxData;
+
+        return "GpxTracksHistoryEntity{" +
+                "trackId=" + trackId +
+                ", gpxData='" + gpxDataShort + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", dateCreated=" + dateCreated +
+                ", dateUpdated=" + dateUpdated +
+                '}';
+    }
 }

@@ -58,7 +58,7 @@ public class GpxTracksDao {
      * Return all the users stored in the database.
      */
     @SuppressWarnings("unchecked")
-    public List getAllDesc() {
-        return entityManager.createQuery("from GpxTracksHistoryEntity track order by track.dateCreated desc").getResultList();
+    public List<GpxTracksHistoryEntity> getAllDesc() {
+        return (List<GpxTracksHistoryEntity>)entityManager.createQuery("from GpxTracksHistoryEntity track order by track.dateCreated desc").getResultList();
     }
 }
